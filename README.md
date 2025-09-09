@@ -10,8 +10,8 @@ Does encrypted full-backups on your external device.
 
 ## Setup
 
-1. Install all requirements
-2. Set up VeraCrypt Volume on external device
+1. Install all requirements.
+2. Set up VeraCrypt Volume on external device.
 3. Set up .env
     - SOURCE_DIRS: All directories you want to secure
     - TARGET_DIR: Directory where to save your backups.
