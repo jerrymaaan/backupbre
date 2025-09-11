@@ -42,6 +42,8 @@ VOLUME_PATH='VeraCryptVolume\Backup.vc'
 
 EXTERNAL_STORAGES='FlashDriveA;FlashDriveB'
 
+POLLING_INTERVAL='5'
+
 ## Environment
 
 Developed on Windows 11 with Python 3.13.
