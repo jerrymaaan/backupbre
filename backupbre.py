@@ -1,29 +1,21 @@
 import os
 import shutil
 import datetime
-from dotenv import load_dotenv
 import subprocess
 
-load_dotenv()  # Load .env file
-
-SOURCE_DIRS = os.getenv('SOURCE_DIRS', '').split(';')
-TARGET_DIR = os.getenv('TARGET_DIR')
-MAX_SNAPSHOTS = int(os.getenv('MAX_SNAPSHOTS', '5'))  # default 5 if missing
-VERACRYPT_PATH = os.getenv('VERACRYPT_PATH')
-VOLUME_PATH = os.getenv('VOLUME_PATH')
-DRIVE_LETTER = TARGET_DIR[0]
+from loadingbre import DRIVE_LETTER, VERACRYPT_PATH, TARGET_DIR, MAX_SNAPSHOTS, SOURCE_DIRS
 
 
-def mount_volume():
+def mount_volume(abs_volume_path):
     # Mount VeraCrypt volume with interactive password prompt
-    print(f'Mounting VeraCrypt volume: {VOLUME_PATH} -> {DRIVE_LETTER}:')
+    print(f'Mounting VeraCrypt volume: {abs_volume_path} -> {DRIVE_LETTER}:\\')
 
     cmd = [
         VERACRYPT_PATH,
-        '/v', VOLUME_PATH,
+        '/v', abs_volume_path,
         '/l', DRIVE_LETTER,
-        # '/q', '/s', '/a'  # quiet, start minimized, automount
         '/q', '/a'  # quiet, automount
+        # '/q', '/s', '/a'  # quiet, start minimized, automount (doesn't work correctly)
     ]
     result = subprocess.run(cmd)
     # subprocess.run() waits until process is finished
@@ -35,7 +27,7 @@ def mount_volume():
 
 def dismount_volume():
     # Dismount VeraCrypt volume
-    print(f'Dismounting {DRIVE_LETTER}:')
+    print(f'Dismounting {DRIVE_LETTER}:\\')
 
     cmd = [VERACRYPT_PATH, '/d', DRIVE_LETTER, '/q']
     subprocess.run(cmd)
@@ -83,8 +75,8 @@ def cleanup_old_backups():
         shutil.rmtree(path_to_delete)
 
 
-if __name__ == '__main__':
-    mount_volume()
+def backupbre(abs_volume_path):
+    mount_volume(abs_volume_path)
     create_backup()
     cleanup_old_backups()
     dismount_volume()

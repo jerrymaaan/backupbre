@@ -1,6 +1,6 @@
 # Backup Bre
 
-Does encrypted full-backups on your external device.
+Does encrypted full-backups on your external storage. For Windows.
 
 ## Requirements
 
@@ -11,15 +11,22 @@ Does encrypted full-backups on your external device.
 ## Setup
 
 1. Install all requirements.
-2. Set up VeraCrypt Volume on external device.
+2. Set up VeraCrypt Volume on external device. See VeraCrypt documentation.
 3. Set up .env
-    - SOURCE_DIRS: All directories you want to secure
+    - SOURCE_DIRS: All directories you want to secure.
     - TARGET_DIR: Directory where to save your backups.
-      Supposed to be inside your mounted volume from VeraCrypt.
+      Supposed to be inside your mounted VeraCrypt volume.
       Drive letter must be free on your device.
     - MAX_SNAPSHOTS: Max. amount of backup snapshots
     - VERACRYPT_PATH: Path to your VeraCrypt.exe
-    - VOLUME_PATH: Path to your VeraCrypt volume file on your external device.
+    - VOLUME_PATH: Path to your VeraCrypt volume file. Supposed to be on your external storage.
+      DO NOT include the drive letter, as it may vary for each external device.
+    - EXTERNAL_STORAGES: All labels of your external devices you want to use for your backup.
+    - POLLING_INTERVAL: Defines time intervals (in seconds) in which watcherbre.py is
+      checking for external storages.
+4. Start or autostart watcherbre.py. When your external storage is plugged in, backupbre
+   automatically starts and asks for your password you set up in step 2.
+   After your backup is done you can unplug your external storage from your device.
 
 ## Example .env
 
@@ -31,8 +38,10 @@ MAX_SNAPSHOTS='5'
 
 VERACRYPT_PATH='C:\Program Files\VeraCrypt\VeraCrypt.exe'
 
-VOLUME_PATH='D:\VeraCryptVolume\Backup.vc'
+VOLUME_PATH='VeraCryptVolume\Backup.vc'
 
-## Additional
+EXTERNAL_STORAGES='FlashDriveA;FlashDriveB'
+
+## Environment
 
 Developed on Windows 11 with Python 3.13.
