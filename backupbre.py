@@ -4,11 +4,12 @@ import datetime
 import subprocess
 
 from loadingbre import DRIVE_LETTER, VERACRYPT_PATH, TARGET_DIR, MAX_SNAPSHOTS, SOURCE_DIRS
+from notifybre import notify
 
 
 def mount_volume(abs_volume_path):
     # Mount VeraCrypt volume with interactive password prompt
-    print(f'Mounting VeraCrypt volume: {abs_volume_path} -> {DRIVE_LETTER}:\\')
+    notify('BackupBre', f'Mounting VeraCrypt volume: {abs_volume_path} -> {DRIVE_LETTER}:\\', dev=True)
 
     cmd = [
         VERACRYPT_PATH,
@@ -27,7 +28,7 @@ def mount_volume(abs_volume_path):
 
 def dismount_volume():
     # Dismount VeraCrypt volume
-    print(f'Dismounting {DRIVE_LETTER}:\\')
+    notify('BackupBre', f'Dismounting {DRIVE_LETTER}:\\', dev=True)
 
     cmd = [VERACRYPT_PATH, '/d', DRIVE_LETTER, '/q']
     subprocess.run(cmd)
@@ -38,22 +39,22 @@ def create_backup():
     timestamp = datetime.datetime.now().strftime('Backup_%Y-%m-%d_%H-%M-%S')
     target_path = os.path.join(TARGET_DIR, timestamp)
 
-    print(f'Create Backup in: {target_path}')
+    notify('BackupBre', f'Create Backup in: {target_path}', dev=True)
     os.makedirs(target_path, exist_ok=True)
 
     # Copy source folders
     for src in SOURCE_DIRS:
         if not os.path.exists(src):
-            print(f'Skip {src}, not found.')
+            notify('BackupBre', f'Skip {src}, not found.', dev=True)
             continue
 
         folder_name = os.path.basename(src.rstrip('\\/'))
         dest = os.path.join(target_path, folder_name)
 
-        print(f'Copies {src} -> {dest}')
+        notify('BackupBre', f'Copies {src} -> {dest}', dev=True)
         shutil.copytree(src, dest)
 
-    print('✅ Backup successful!')
+    notify('BackupBre', 'Backup successful!', dev=True)
 
 
 def cleanup_old_backups():
@@ -71,7 +72,7 @@ def cleanup_old_backups():
     while len(entries) > MAX_SNAPSHOTS:
         oldest = entries.pop(0)
         path_to_delete = os.path.join(TARGET_DIR, oldest)
-        print(f'🗑️ Deleting old backup: {path_to_delete}')
+        notify('BackupBre', f'Deleting old backup: {path_to_delete}', dev=True)
         shutil.rmtree(path_to_delete)
 
 

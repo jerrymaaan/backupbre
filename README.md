@@ -1,12 +1,13 @@
 # Backup Bre
 
-Does encrypted full-backups on your external storage. For Windows.
+BackupBre does encrypted full-backups on your external storage. For Windows.
 
 ## Requirements
 
 - Python
 - Package python-dotenv
 - VeraCrypt
+- winotify
 
 ## Setup
 
@@ -22,9 +23,9 @@ Does encrypted full-backups on your external storage. For Windows.
     - VOLUME_PATH: Path to your VeraCrypt volume file. Supposed to be on your external storage.
       DO NOT include the drive letter, as it may vary for each external device.
     - EXTERNAL_STORAGES: All labels of your external devices you want to use for your backup.
-    - POLLING_INTERVAL: Defines time intervals (in seconds) in which watcherbre.py is
+    - POLLING_INTERVAL: Defines time intervals (in seconds) in which the app is
       checking for external storages.
-4. Start or autostart watcherbre.py. When your external storage is plugged in, backupbre
+4. Start or autostart app.py. When your external storage is plugged in, BackupBre
    automatically starts and asks for your password you set up in step 2.
    After your backup is done you can unplug your external storage from your device.
 
