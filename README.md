@@ -48,3 +48,7 @@ POLLING_INTERVAL='5'
 ## Environment
 
 Developed on Windows 11 with Python 3.13.
+
+## Known issues
+
+Issues with deleting read-only files in your backup. Fix coming soon!
