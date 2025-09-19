@@ -51,4 +51,4 @@ Developed on Windows 11 with Python 3.13.
 
 ## Known issues
 
-Issues with deleting read-only files and folders (e.g. .git) in your backup. Fix coming soon!
+Issues with deleting read-only files and folders (e.g. /.git) in your backup. Fix coming soon!
