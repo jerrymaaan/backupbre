@@ -2,6 +2,7 @@ import os
 import shutil
 import datetime
 import subprocess
+import stat
 
 from loadingbre import DRIVE_LETTER, VERACRYPT_PATH, TARGET_DIR, MAX_SNAPSHOTS, SOURCE_DIRS
 from notifybre import notify
@@ -52,7 +53,8 @@ def create_backup():
         dest = os.path.join(target_path, folder_name)
 
         notify('BackupBre', f'Copies {src} -> {dest}', dev=True)
-        shutil.copytree(src, dest)
+        # does not back up desktop.ini
+        shutil.copytree(src, dest, ignore=shutil.ignore_patterns("desktop.ini"))
 
     notify('BackupBre', 'Backup successful!', dev=True)
 
@@ -73,6 +75,14 @@ def cleanup_old_backups():
         oldest = entries.pop(0)
         path_to_delete = os.path.join(TARGET_DIR, oldest)
         notify('BackupBre', f'Deleting old backup: {path_to_delete}', dev=True)
+
+        # deletes path and desktop.ini, without permission errors
+        for root, dirs, files in os.walk(path_to_delete):
+            for name in files:
+                if name == "desktop.ini":
+                    os.chmod(os.path.join(root, name), stat.S_IWRITE)
+
+        os.chmod(path_to_delete, stat.S_IWRITE)
         shutil.rmtree(path_to_delete)
 
 
